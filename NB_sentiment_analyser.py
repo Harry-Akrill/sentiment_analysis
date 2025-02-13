@@ -15,11 +15,7 @@ from sentence_set import SentenceSet
 import matplotlib.pyplot as plt
 from preprocess import Preprocess
 
-
-"""
-IMPORTANT, modify this part with your details
-"""
-USER_ID = "aca19haa" #your unique student ID, i.e. the IDs starting with "acp", "mm" etc that you use to login into MUSE 
+USER_ID = ""
 
 def parse_args():
     parser=argparse.ArgumentParser(description="A Naive Bayes Sentiment Analyser for the Rotten Tomatoes Movie Reviews dataset")
@@ -55,11 +51,6 @@ def main():
     
     #whether to print confusion matrix (default = no confusion matrix)
     confusion_matrix = inputs.confusion_matrix
-    
-    """
-    ADD YOUR CODE HERE
-    Create functions and classes, using the best practices of Software Engineering
-    """
 
     #You need to change this in order to return your macro-F1 score for the dev set
     f1_score = 0
@@ -80,15 +71,8 @@ def main():
     #setting development data to sentences
     np_dev_csv = dev_csv.to_numpy()
     dev_sentence_list = list()
-    #negation_dict = dict() # Failed negation implementation
     for i in np_dev_csv:
         phrase = Preprocess(i[1],features,False).processed_phrase
-        
-        #split_phrase = phrase.split(" ")
-        # negation = mark_negation(split_phrase)
-        # print(negation)
-        # if any("_NEG" in word for word in negation):
-        #     negation_dict[i[0]] = 1
         
         sentence = Sentence(i[0],phrase,i[2],number_classes)
         dev_sentence_list.append(sentence) 
@@ -125,13 +109,6 @@ def main():
     posteriors_dev = calculate_posteriors(training_sentence_set,prior_probabilites,dev_sentence_list,number_classes)
     posteriors_test = calculate_posteriors(training_sentence_set,prior_probabilites,test_sentence_list,number_classes)
 
-    # for sentenceid in posteriors_dev: # Failed negation implementation
-    #     if sentenceid in negation_dict:
-    #         if posteriors_dev[sentenceid] == 0:
-    #             posteriors_dev[sentenceid] = 2
-    #         if posteriors_dev[sentenceid] == 2:
-    #             posteriors_dev[sentenceid] = 0
-
     f1_score = calculate_macro_f1_score(posteriors_dev,dev_sentence_list,number_classes)
 
     if output_files == True:
@@ -142,7 +119,6 @@ def main():
     IMPORTANT: your code should return the lines below. 
     However, make sure you are also implementing a function to save the class predictions on dev and test sets as specified in the assignment handout
     """
-    #print("Student\tNumber of classes\tFeatures\tmacro-F1(dev)\tAccuracy(dev)")
     print("%s\t%d\t%s\t%f" % (USER_ID, number_classes, features, f1_score))
 
 def display_confusion_matrices(predicted,actual):
